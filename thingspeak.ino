@@ -7,10 +7,11 @@ dht DHT;
 
 #define DEBUG true
 // Wi-Fi接入點的SSID和密碼
-// const  char *ssid  = "AIOT";
-// const  char *password  = "0277380000";
+const  char *  ssid  =  "NETGEAR30";
+const  char *  password  =  "wssxxxxxx";
 
-const char* host = "184.73.109.247";
+
+const char* host = "184.106.153.149";
 const int httpsPort = 443;
 const int httpPort = 80;
 
@@ -32,27 +33,30 @@ Serial.print(response);
     return response;
 }
 
-void setup()
-{
+void setup(){  
+ 
+  Serial1.begin(115200);//RX1 TX1，即 Pin18 及 Pin19 
   Serial.begin(115200);
-  while(!Serial);
-  Serial1.begin(115200);
+  while (!Serial) ;       // 等待序列埠開啟完成
+  
   sendData("AT+RST\r\n",2000,DEBUG);
-  sendData("AT+CWMODE=3\r\n",2000,DEBUG);
+  sendData("AT+CWMODE=3\r\n",200,DEBUG);
   String commend = "AT+CWJAP=\"";
-  commend += "AIOT";
+  commend += ssid;
   commend += "\",\"";
-  commend += "0277388000";
+  commend += password;
   commend += "\"\r\n";
   if (sendData(commend,5000,DEBUG)){  
     Serial.print("Join AP success\r\n");
     Serial.print("IP:");
     sendData("AT+CIFSR\r\n",5000,DEBUG);
-    sendData("AT+CIPSERVER=0\r\n",200,DEBUG);
+    sendData("AT+CIPSERVER=0\r\n",200,DEBUG); 
     sendData("AT+CIPMUX=0\r\n",200,DEBUG);
+    sendData("AT+CIFSR\r\n",5000,DEBUG);
+    sendData("AT+CIFSR\r\n",5000,DEBUG);
+    
   }
 }
-
 void loop(){   
   DHT.read11(dht_dpin);                    //去library裡面找DHT.read11  
     
@@ -63,7 +67,7 @@ void loop(){
   commends += "\r\n";
   sendData(commends,1000,DEBUG);
   
-  String GET = "GET /update?api_key=RQ13R7HT154LVAGR";
+  String GET = "GET /update?api_key=4HCSX4OQ6GFTDV8H";
   GET += "&field1=";
   GET += DHT.temperature;
   GET += "&field2=";
@@ -83,5 +87,5 @@ void loop(){
   delay(1000);   
   sendData("AT+CIFSR\r\n",5000,DEBUG); 
   delay(15000);
-  //每15000ms更新一次   
+  //每1000ms更新一次   
 } 
