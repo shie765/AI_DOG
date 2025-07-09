@@ -1,0 +1,3 @@
+0 beagle
+1 bulldog
+2 dalmatian
