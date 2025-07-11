@@ -1,17 +1,20 @@
 #include <SPI.h>
 #include <dht.h>     
-#define dht_dpin A8              //定義訊號要從Pin A8 進來  
+#define dht_dpin A0              //定義訊號要從Pin A8 進來  
 #include <Wire.h>  // Arduino IDE 內建
 
 dht DHT;   
 
 #define DEBUG true
 // Wi-Fi接入點的SSID和密碼
-const  char *  ssid  =  "NETGEAR30";
-const  char *  password  =  "wssxxxxxx";
+const  char*  ssid  =  "Your SSID";
+const  char*  password  =  "Your WIFI Password";
 
+//const char* host = "184.106.153.149";
+//const char* host = "api.thingspeak.com";
+const char* host = "35.171.214.17";
+const char* Write_API_Key = "Your WIFI Write_API_Key";
 
-const char* host = "184.106.153.149";
 const int httpsPort = 443;
 const int httpPort = 80;
 
@@ -67,7 +70,8 @@ void loop(){
   commends += "\r\n";
   sendData(commends,1000,DEBUG);
   
-  String GET = "GET /update?api_key=4HCSX4OQ6GFTDV8H";
+  String GET = "GET /update?api_key=";
+  GET += Write_API_Key;
   GET += "&field1=";
   GET += DHT.temperature;
   GET += "&field2=";
